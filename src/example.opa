@@ -67,7 +67,7 @@ mk_columns() = [
             TableBuilder.mk_column(
                 <>Tool</>,
                 (r,chan -> 
-                    <button onclick={_-> do Session.send(chan, {del_filter=(v->v.k == r.k)}) rm(r.k)}>Del filter</button>
+                    <button onclick={_-> do TableBuilder.rm_filter(chan, (v->v.k == r.k)) rm(r.k)}>Del filter</button>
                 ),
                 none,
                 none
@@ -90,15 +90,15 @@ onready() =
     onadd(_) = 
         k=add(row())
         row_k={~k v=row()}
-        Session.send(table.channel, {add=row_k})
+        TableBuilder.add(table.channel, row_k)
     // delete by key
     ondelkey(_) =
         do rm(key())
-        Session.send(table.channel, {del_key=key()})
+        TableBuilder.rm_key(table.channel, key())
     // edit by key
     oneditkey(_) =
         do save(key(), row())
-        Session.send(table.channel, {edit_key={key=key() row=row_k()}})
+        TableBuilder.edit_key(table.channel, key(), row_k())
     xhtml = 
     <>
     str : <input id=#str/> 

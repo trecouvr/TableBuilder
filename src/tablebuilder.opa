@@ -10,7 +10,7 @@ import bddc.tools
 
 
 
-type TableBuilder.message('row) = 
+@abstract type TableBuilder.message('row) = 
     {show} /
     {sort : int} /
     {del_key : int} / 
@@ -201,6 +201,33 @@ TableBuilder = {{
         <tbody>
         {xhtml_body(spec)}
         </tbody>
-        
+    
+    
+    @client
+    rm_key(chan : channel(TableBuilder.message('row)), key : int) : void =
+        do Session.send(chan, {del_key=key})
+        void
+
+    @client
+    rm_filter(chan : channel(TableBuilder.message('row)), filter : ('row->bool)) : void =
+        do Session.send(chan, {del_filter=filter})
+        void
+
+    @client
+    edit_key(chan : channel(TableBuilder.message('row)), key : int, row : 'row) : void =
+        do Session.send(chan, {edit_key={~key ~row}})
+        void
+
+    @client
+    edit_filter(chan : channel(TableBuilder.message('row)), filter : ('row -> 'row)) : void =
+        do Session.send(chan, {edit_filter=filter})
+        void
+
+    @client
+    add(chan : channel(TableBuilder.message('row)), row : 'row) : void =
+        do Session.send(chan, {add=row})
+        void
+    
+    
 }}
 
