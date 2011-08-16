@@ -15,11 +15,11 @@ Tools = {{
 
     
     option = {{
-        perform_default(f : ('o -> 'r), default : 'r, o : option('o)) : 'r =
+        perform_default(f : ('o -> 'r), default : (->'r), o : option('o)) : 'r =
             if Option.is_some(o) then
                 f(Option.get(o))
             else
-                default
+                default()
     }}
 
 

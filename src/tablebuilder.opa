@@ -118,7 +118,7 @@ TableBuilder = {{
     onclick_sort(i_col : int, spec : TableBuilder.spec('row)) : TableBuilder.spec('row) = 
         Tools.option.perform_default(
             (col -> set_sort(i_col, set_reverse(i_col, not(col.sort_reverse), spec))),
-            spec,
+            ->spec,
             List.get(i_col,spec.columns)
         )
     
@@ -139,10 +139,10 @@ TableBuilder = {{
                     else
                         {spec with content = List.sort_with(ord,spec.content)}
                 ),
-                spec,
+                ->spec,
                 col.order
             )),
-            spec,
+            ->spec,
             List.get(spec.sort_active,spec.columns)
         )
     
