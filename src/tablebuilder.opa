@@ -167,7 +167,7 @@ TableBuilder = {{
     @client
     @private
     xhtml_table(spec : TableBuilder.spec('row), channel : channel(TableBuilder.message('row))) : xhtml =
-        xhtml_header(s : TableBuilder.spec('row)) : xhtml =
+        xhtml_header() : xhtml =
             List.foldi( (i,col,acc -> 
                             <>{acc}<th>{col.label}<>{
                             if Option.is_some(col.order) then
@@ -178,7 +178,7 @@ TableBuilder = {{
                         ),
                         spec.columns,
                         <></>)
-        xhtml_body(s : TableBuilder.spec('row)) : xhtml =
+        xhtml_body() : xhtml =
             List.fold( (row,acc ->
                            <>{acc}
                            <tr>
@@ -187,7 +187,7 @@ TableBuilder = {{
                                            <td>{col.cell_maker(row, channel)}</td>
                                            </>
                                        ),
-                                       s.columns,
+                                       spec.columns,
                                        <></>
                            )}
                            </tr>
@@ -196,10 +196,10 @@ TableBuilder = {{
                        spec.content,
                        <></>)
         <thead>
-        {xhtml_header(spec)}
+        {xhtml_header()}
         </thead>
         <tbody>
-        {xhtml_body(spec)}
+        {xhtml_body()}
         </tbody>
     
     
