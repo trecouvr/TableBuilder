@@ -1,6 +1,7 @@
 
 
 import bddc.tablebuilder
+import stdlib.database.db3
 
 /**
  *
@@ -24,16 +25,16 @@ init() =
 do init()
 
 get_values() : list(vtest_k) =
-    Db.intmap_fold_range(
+    Db3.intmap_fold_range(
         @/test,
         (acc,k -> List.add({~k v=/test[k]},acc)),
         [],0,none,(_->true)
     )
 add(new_v : vtest) : int =
-    key = Db.fresh_key(@/test)
+    key = Db3.fresh_key(@/test)
     do save(key, new_v)
     key
-save(key : int, new_v : vtest) = 
+save(key : int, new_v : vtest) =
     /test[key] <- new_v
 rm(key : int) =
     Db.remove(@/test[key])
@@ -50,7 +51,7 @@ rm(key : int) =
 
 
 
-@client 
+@client
 mk_columns() = [
             TableBuilder.mk_column(
                 <>String</>,
@@ -66,7 +67,7 @@ mk_columns() = [
             ),
             TableBuilder.mk_column(
                 <>Tool</>,
-                (r,chan -> 
+                (r,chan ->
                     <button onclick={_-> do TableBuilder.rm_filter(chan, (v->v.k == r.k)) rm(r.k)}>Del filter</button>
                 ),
                 none,
@@ -87,7 +88,7 @@ onready() =
     row_k() = {k=key() v={str=str() i=i()}}
     row() = {str=str() i=i()}
     // add
-    onadd(_) = 
+    onadd(_) =
         k=add(row())
         row_k={~k v=row()}
         TableBuilder.add(table.channel, row_k)
@@ -99,10 +100,10 @@ onready() =
     oneditkey(_) =
         do save(key(), row())
         TableBuilder.edit_key(table.channel, key(), row_k())
-    xhtml = 
+    xhtml =
     <>
-    str : <input id=#str/> 
-    int : <input id=#int /> 
+    str : <input id=#str/>
+    int : <input id=#int />
     key : <input id=#key/>
     <button onclick={onadd}>Ajouter</button>
     <button onclick={ondelkey}>Del key</button>
