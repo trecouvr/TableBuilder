@@ -1,16 +1,17 @@
 
 
 OPA=opa
+OPAOPT=--parser classic
 FILES=$(shell find src -name '*.opa')
 EXE=main.exe
 
 all: $(FILES)
-	$(OPA) $^ -o main.exe
+	$(OPA) $(OPAOPT) $^ -o main.exe
 
-run:	
+run:
 	./$(EXE) --db-local db/db
 
-new-db:	
+new-db:
 	./$(EXE) --db-local db/db --db-force-upgrade
 
 clean-db:
